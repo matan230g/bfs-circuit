@@ -1,6 +1,3 @@
-from input import Input
-from output import Output
-
 
 class Gate:
     def __init__(self, txt):
