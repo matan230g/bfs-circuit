@@ -13,7 +13,7 @@ class Circuit:
         self.name = system[0]
         self.inputs = self.create_node(system[1])
         self.outputs = self.create_node(system[2])
-        self.nodes = self.outputs
+        self.nodes = self.outputs + self.inputs
 
         gates = system[3].split('\n')
         gates.remove('')
@@ -29,18 +29,18 @@ class Circuit:
             inputs_gate =[]
             for i in temp[3:]:
                 if i != "":
-                    inputs_gate.append(Node(i))
+                    inputs_gate.append(self.find_nodes(i))
             output_node = self.find_nodes(output_gate)
             self.gates.append(Gate(gate_type,gate_name,output_node,inputs_gate))
 
 
     def print(self):
-        print("name: " + self.name)
+        # print("name: " + self.name)
         # print("outputs: " + self.outputs)
         # print("inputs: "+self.inputs)
         # print("gates: ")
-        # for g in self.gates:
-        #     print(g)
+        for g in self.gates:
+            print(g)
 
     @staticmethod
     def create_node(nodes):
@@ -48,16 +48,18 @@ class Circuit:
         nodes = nodes.replace('\n', '')
         nodes = nodes.replace(']', '')
         nodes = nodes.split(',')
+
         list_nodes = []
         for n in nodes:
             list_nodes.append(Node(n))
         return list_nodes
 
     def find_nodes(self, name_node):
-        if name_node in [lambda x: x.name in self.nodes]:
-                return x
-            else:
-                new_node = Node(name_node)
-                self.nodes.append(new_node)
-                return new_node
+        for node in self.nodes:
+            if node.name == name_node:
+                return node
+
+        new_node = Node(name_node)
+        self.nodes.append(new_node)
+        return new_node
 

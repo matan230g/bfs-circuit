@@ -5,3 +5,6 @@ class Node:
 
     def set_value(self, value):
         self.value = value
+
+    def __str__(self):
+        return " node: " + self.name + " value: " + ("0" if self.value is None else str(self.value))
