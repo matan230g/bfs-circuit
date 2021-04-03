@@ -4,16 +4,23 @@ class Gate:
         if gate_type.find("and") != -1:
             And(gate_type, gate_name, gate_output, gate_inputs)
 
+        if gate_type.find("or") != -1:
+            Or(gate_type, gate_name, gate_output, gate_inputs)
+
+        if gate_type.find("xor") != -1:
+            Xor(gate_type, gate_name, gate_output, gate_inputs)
+
+        if gate_type.find("nor") != -1:
+            Nor(gate_type, gate_name, gate_output, gate_inputs)
+
+        if gate_type.find("nand") != -1:
+            Nand(gate_type, gate_name, gate_output, gate_inputs)
+
         if gate_type.find("inverter") != -1:
             Inverter(gate_type, gate_name, gate_output, gate_inputs)
 
-        # self.gate_name = gate_name
-        # self.gate_output = gate_output
-        # self.gate_inputs = gate_inputs
-        # self.gate_type = gate_type
-
-
-
+        if gate_type.find("buffer") != -1:
+            Buffer(gate_type, gate_name, gate_output, gate_inputs)
 
 
 
@@ -30,7 +37,7 @@ class And(Gate):
         self.gate_inputs = gate_inputs
         self.gate_type = gate_type
 
-        # exampel - work :)
+        # exampel - work :) delete later
         for node in self.gate_inputs:
             node.value = 1
 
@@ -61,31 +68,35 @@ class Xor(Gate):
         self.gate_output.value = any([i.value for i in xor_list])
 
 class Nor(Gate):
+    # not or
     def __init__(self, gate_type, gate_name, gate_output, gate_inputs):
         self.gate_name = gate_name
         self.gate_output = gate_output
         self.gate_inputs = gate_inputs
         self.gate_type = gate_type
+
+        self.gate_output.value = not (any([i.value for i in self.gate_inputs]))
+
 
 class Nand(Gate):
+    # not and
     def __init__(self, gate_type, gate_name, gate_output, gate_inputs):
         self.gate_name = gate_name
         self.gate_output = gate_output
         self.gate_inputs = gate_inputs
         self.gate_type = gate_type
+
+        self.gate_output.value = not (all([i.value for i in self.gate_inputs]))
 
 class Inverter(Gate):
+    # not
     def __init__(self, gate_type, gate_name, gate_output, gate_inputs):
         self.gate_name = gate_name
         self.gate_output = gate_output
         self.gate_inputs = gate_inputs
         self.gate_type = gate_type
 
-        print(self.gate_type)
-        print(self.gate_name)
-        print(self.gate_inputs)
-        print(self.gate_output)
-
+        self.gate_output.value = not gate_output.value
 
 
 class Buffer(Gate):
@@ -94,3 +105,5 @@ class Buffer(Gate):
         self.gate_output = gate_output
         self.gate_inputs = gate_inputs
         self.gate_type = gate_type
+
+        self.gate_output.value = gate_output.value
