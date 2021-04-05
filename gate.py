@@ -54,18 +54,20 @@ class Or(Gate):
         self.gate_output.value = any([i.value for i in self.gate_inputs])
 
 class Xor(Gate):
+    # Any ODD Number of Inputs
     def __init__(self, gate_type, gate_name, gate_output, gate_inputs):
         self.gate_name = gate_name
         self.gate_output = gate_output
         self.gate_inputs = gate_inputs
         self.gate_type = gate_type
 
-        xor_list = []
-        for i in self.gate_inputs:
-            for j in self.gate_inputs[1:]:
-                xor = i.value ^ j.value
-                xor_list.append(xor)
-        self.gate_output.value = any([i.value for i in xor_list])
+
+        xor_list = [i.value for i in self.gate_inputs]
+        xor = xor_list.count(1)
+        if xor % 2 == 0:
+            self.gate_output.value = 0
+        else:
+            self.gate_output.value = 1
 
 class Nor(Gate):
     # not or
