@@ -43,7 +43,6 @@ class Circuit:
             output_ob.calculate_value(x)
             observation.outputs.append(output_ob)
 
-
     def check(self, observation):
 
         observation_outputs = []
@@ -76,7 +75,10 @@ class Circuit:
                     if z_node.name == gate_input.name:
                         observation_inputs.append(z_node)
 
-            diagnose_gate = Gate(gate.gate_type,gate.gate_name,gate.gate_output,observation_inputs)
+            diagnose_gate = gate
+            if not gate.flipped:
+                diagnose_gate = Gate(gate.gate_type,gate.gate_name,gate.gate_output,observation_inputs)
+
             test_gates.append(diagnose_gate)
 
             z_nodes.append(diagnose_gate.gate_output)
@@ -107,7 +109,32 @@ class Circuit:
                     diagnose_nodes.append(node_test)
                     print("name:" , node_test.name , "test gate:" , node_test.value , "observation:" ,node_observation.value)
 
-        print("test")
+        # print("test")
+        return diagnose_nodes
+
+    def find_bad_gates(self, bad_outputs, object_observation):
+
+        # loop over every gate and flip the gate output,
+        # if the problem fixed, the gate is one diagnose
+        diagnosed_gates = []
+        for gate in self.gates:
+            # gate_flipped_output = not gate.gate_output
+            print("#########################################################")
+            print("New Gate")
+            print(gate.gate_output.value)
+            gate.gate_output.value = not gate.gate_output.value
+            gate.flipped = True
+            temp_bad_outputs = self.check(object_observation)
+
+            print()
+            print(gate.gate_output.value)
+
+            if len(temp_bad_outputs) < len(bad_outputs):
+                diagnosed_gates.append(gate)
+                gate.gate_output.value = not gate.gate_output.value
+                gate.flipped = False
+                self.check(object_observation)
+
 
 
 
@@ -145,5 +172,7 @@ class Circuit:
         new_node = Node(name_node)
         self.nodes.append(new_node)
         return new_node
+
+
 
 

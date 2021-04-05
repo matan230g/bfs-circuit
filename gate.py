@@ -5,6 +5,7 @@ class Gate:
         self.gate_output = gate_output
         self.gate_inputs = gate_inputs
         self.gate_type = gate_type
+        self.flipped = False
 
         if gate_type.find("and") != -1:
             # And(gate_type, gate_name, gate_output, gate_inputs)

@@ -17,7 +17,8 @@ for o in observations:
 
 for object_observation in observations_list:
     c1.addObservation(object_observation)
-    c1.check(object_observation)
+    bad_outputs = c1.check(object_observation)
+    c1.find_bad_gates(bad_outputs,object_observation)
 # c1.nodes[22].set_value(1)
 #
 # c1.print()
