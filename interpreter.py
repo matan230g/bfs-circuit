@@ -17,6 +17,7 @@ for o in observations:
 
 for object_observation in observations_list:
     c1.addObservation(object_observation)
+    c1.check(object_observation)
 # c1.nodes[22].set_value(1)
 #
 # c1.print()

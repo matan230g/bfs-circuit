@@ -33,11 +33,11 @@ class Gate:
 
         elif gate_type.find("inverter") != -1:
             # Inverter(gate_type, gate_name, gate_output, gate_inputs)
-            self.gate_output.value = not gate_output.value
+            self.gate_output.value = not gate_inputs[0].value
 
         elif gate_type.find("buffer") != -1:
             # Buffer(gate_type, gate_name, gate_output, gate_inputs)
-            self.gate_output.value = gate_output.value
+            self.gate_output.value = gate_inputs[0].value
 
 
 

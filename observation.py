@@ -6,4 +6,5 @@ class Observation:
         li[2] = li[2].replace(']', '')
         self.inputs_outputs = li[2].split(',')
         self.inputs = []
-        self.output = []
+        self.outputs = []
+
