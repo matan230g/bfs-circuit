@@ -32,6 +32,24 @@ class Circuit:
                     inputs_gate.append(self.find_nodes(i))
             output_node = self.find_nodes(output_gate)
             self.gates.append(Gate(gate_type,gate_name,output_node,inputs_gate))
+    def addObservation(self,o):
+        # insert observation
+        for x, input_ob in zip(o.inputs_outputs[:len(self.inputs)], self.inputs):
+            input_ob.set_value(x)
+            o.inputs.append(input_ob)
+
+        for x, output_ob in zip(o.inputs_outputs[len(self.inputs):], self.outputs):
+            output_ob.set_value(x)
+            o.output.append(output_ob)
+
+
+
+
+
+
+
+
+
 
 
     def print(self):

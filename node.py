@@ -7,8 +7,11 @@ class Node:
         else:
             self.value = 1
 
-    def set_value(self, value):
-        self.value = value
+    def set_value(self, name):
+        if name.find("-") != -1:
+            self.value = 0
+        else:
+            self.value = 1
 
     def __str__(self):
         # return " node: " + self.name + " value: " + ("0" if self.value is None else str(self.value))
