@@ -11,4 +11,5 @@ class Node:
         self.value = value
 
     def __str__(self):
-        return " node: " + self.name + " value: " + ("0" if self.value is None else str(self.value))
+        # return " node: " + self.name + " value: " + ("0" if self.value is None else str(self.value))
+        return " node: " + self.name + " value: " + str(self.value)
