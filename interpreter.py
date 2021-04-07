@@ -17,9 +17,11 @@ for o in observations:
     observations_list.append(Observation(o))
 
 for object_observation in observations_list:
-    c1.addObservation(object_observation)
+    c1.add_observation(object_observation)
+
     ## what output is fault
-    bad_outputs = c1.check(object_observation)
+    bad_outputs = c1.check_observation(object_observation)
+
     ## find the gate the fault output is belong
     c1.find_bad_gates(bad_outputs, object_observation)
 # c1.nodes[22].set_value(1)
