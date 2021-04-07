@@ -40,12 +40,20 @@ class Circuit:
             observation.inputs.append(input_ob)
 
         for x, output_ob in zip(observation.inputs_outputs[len(self.inputs):], self.outputs):
-            output_ob.calculate_value(x)
-            observation.outputs.append(output_ob)
+            observation.outputs.append(Node(x))
 
     def check(self, observation):
+        for g in self.gates:
+            g.calculate()
+        print('except:')
+        for e in self.outputs:
+            print(e)
+        print('observation : ')
+        for o in observation.outputs:
+            print(o)
 
         observation_outputs = []
+        ## observation status for compare
         for observation_node in observation.outputs:
             new_node_name = observation_node.name + '_observation'
             new_node = Node(new_node_name)
@@ -59,6 +67,7 @@ class Circuit:
 
         # add observation inputs to the circuit inputs
 
+        ## the gates create for test
         test_gates = []
         z_nodes = []
         # observation_inputs = []
@@ -76,6 +85,7 @@ class Circuit:
                         observation_inputs.append(z_node)
 
             diagnose_gate = gate
+            #
             if not gate.flipped:
                 diagnose_gate = Gate(gate.gate_type,gate.gate_name,gate.gate_output,observation_inputs)
 
@@ -105,6 +115,7 @@ class Circuit:
         for (node_test,node_observation) in zip(compare_list_test_gates,compare_list_observation):
             # for node_observation in compare_list_observation:
                 node_name = node_observation.name.split("_", 1)[0]
+            # the output is wrong
                 if node_test.name == node_name and node_test.value != node_observation.value:
                     diagnose_nodes.append(node_test)
                     print("name:" , node_test.name , "test gate:" , node_test.value , "observation:" ,node_observation.value)
