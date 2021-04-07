@@ -43,7 +43,7 @@ class Circuit:
             output_ob.calculate_value(x)
             observation.outputs.append(output_ob)
 
-    def check_observation(self, diagnose_outputs):
+    def check_observation(self, observation):
 
         ## observation status for compare
 
