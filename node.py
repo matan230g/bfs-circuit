@@ -1,7 +1,10 @@
 class Node:
     def __init__(self, name):
         self.name = name
-        self.value = ""
+        if name.find("-")  != -1:
+            self.value = False
+        else:
+            self.value = True
 
     def calculate_value(self, name):
         if name.find("-") != -1:

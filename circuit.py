@@ -1,10 +1,15 @@
 from gate import Gate
 from node import Node
+from itertools import combinations
 
 
 class Circuit:
     def __init__(self, file_path):
         self.from_file_to_circuit(file_path)
+
+    def unflipped(self):
+        for g in self.gates:
+            g.switch_unfilpped()
 
     def from_file_to_circuit(self, file_path):
         f = open(file_path, "r")
@@ -26,12 +31,12 @@ class Circuit:
             gate_type = temp[0]
             gate_name = temp[1]
             output_gate = temp[2]
-            inputs_gate =[]
+            inputs_gate = []
             for i in temp[3:]:
                 if i != "":
                     inputs_gate.append(self.find_nodes(i))
             output_node = self.find_nodes(output_gate)
-            self.gates.append(Gate(gate_type,gate_name,output_node,inputs_gate))
+            self.gates.append(Gate(gate_type, gate_name, output_node, inputs_gate))
 
     def add_observation(self, observation):
         # insert observation
@@ -40,8 +45,9 @@ class Circuit:
             observation.inputs.append(input_ob)
 
         for x, output_ob in zip(observation.inputs_outputs[len(self.inputs):], self.outputs):
-            output_ob.calculate_value(x)
-            observation.outputs.append(output_ob)
+            observation.outputs.append(Node(x))
+        for g in self.gates:
+            g.calculate()
 
     def check_observation(self, observation):
 
@@ -63,17 +69,17 @@ class Circuit:
         for o in observation_outputs:
             print(o)
 
-        diagnose_outputs = []
-        for (gate_out,obs_out) in zip(self.outputs,observation_outputs):
-            obs_out_name = obs_out.name.split("_")
-            obs_out_name = obs_out_name[0]
-            if obs_out_name == gate_out.name and obs_out.value !=gate_out.value:
-                diagnose_outputs.append(gate_out)
-
-        for o in diagnose_outputs:
-            print(o)
-
-        return diagnose_outputs
+        # diagnose_outputs = []
+        # for (gate_out,obs_out) in zip(self.outputs,observation_outputs):
+        #     obs_out_name = obs_out.name.split("_")
+        #     obs_out_name = obs_out_name[0]
+        #     if obs_out_name == gate_out.name and obs_out.value !=gate_out.value:
+        #         diagnose_outputs.append(gate_out)
+        #
+        # for o in diagnose_outputs:
+        #     print(o)
+        #
+        # return diagnose_outputs
 
     # def check(self, observation):
     #
@@ -176,14 +182,21 @@ class Circuit:
                 gate.flipped = False
                 self.check(object_observation)
 
+    def run_diagnose(self, list_gates):
+        for g in list_gates:
+            g.switch_flipped()
+        for g in self.gates:
+            g.calculate()
 
-
-
-
-
-
-
-
+    def check_fix(self, observation):
+        # print(observation.number,":")
+        # print ('observation outputs: ',[x.value for x in observation.outputs])
+        # print('circuit outputs: ',[x.value for x in self.outputs])
+        for output_observation, output_circuit in zip(observation.outputs, self.outputs):
+            if output_circuit.value != output_observation.value:
+                return False
+        print("bingo")
+        return True
 
     def print(self):
         # print("name: " + self.name)
@@ -214,6 +227,15 @@ class Circuit:
         self.nodes.append(new_node)
         return new_node
 
-
-
-
+    def create_graph_gates(self, observation):
+        # Get all permutations of length 2
+        # and length 2
+        result = []
+        for i in range(1, 40):
+            comb = combinations(self.gates, i)
+            for x in comb:
+                self.run_diagnose(list(x))
+                if self.check_fix(observation):
+                    print(observation.number,": ",[y.gate_name for y in x])
+                for gate in x:
+                    gate.switch_unfilpped()
