@@ -107,8 +107,16 @@ class Circuit:
     def create_graph_gates(self, observation):
         # Get all permutations of length 2
         # and length 2
-        visited = []
         start_time = time.time()
+        if self.check_fix(observation):
+            end_time = time.time()
+            new_row = {'System Name': self.name, 'Observation no.': observation.number,
+                       'Number of Diagnoses': 0,
+                       'Minimal Cardinality': 0, 'Runtime (ms)': round((end_time-start_time)*1000)}
+            self.df = self.df.append(new_row, ignore_index=True)
+            return
+        visited = []
+
         flag = False
         for i in range(1, 40):
             comb = combinations(self.gates, i)
@@ -124,12 +132,13 @@ class Circuit:
                 if not self.intersection(visited, list_of_gates):
                     self.run_diagnose(list(list_of_gates))
                     if self.check_fix(observation):
-                        print(observation.number, ": ", [y.gate_name for y in list_of_gates])
+                        # print(observation.number, ": ", [y.gate_name for y in list_of_gates])
                         # remove the visited fix gates
                         visited.append(list(list_of_gates))
                     for gate in list_of_gates:
                         gate.switch_unfilpped()
-        min_cardinality = min([len(ls) for ls in visited])
+
+        min_cardinality = 0 if not visited else min([len(ls) for ls in visited])
         end_time = time.time()
         new_row = {'System Name': self.name, 'Observation no.': observation.number,
                    'Number of Diagnoses': len(visited),
