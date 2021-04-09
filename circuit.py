@@ -109,9 +109,18 @@ class Circuit:
         # and length 2
         visited = []
         start_time = time.time()
+        flag = False
         for i in range(1, 40):
             comb = combinations(self.gates, i)
+            if flag:
+                break
             for list_of_gates in comb:
+                current_time = time.time()
+                if (current_time - start_time) / 60 >= 3:
+                    print("3 minutes")
+                    print((current_time - start_time) / 60)
+                    flag = True
+                    break
                 if not self.intersection(visited, list_of_gates):
                     self.run_diagnose(list(list_of_gates))
                     if self.check_fix(observation):
