@@ -21,6 +21,7 @@ for object_observation in observations_list:
 
     c1.create_graph_gates(object_observation)
 
+print(c1.df)
     ## what output is fault
     # bad_outputs = c1.check_observation(object_observation)
 
