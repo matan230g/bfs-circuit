@@ -1,7 +1,7 @@
 from circuit import Circuit
 from observation import Observation
 
-name_file = '74181'
+name_file = '74283'
 c1 = Circuit("data/circuits/Data_Systems/"+name_file+".sys")
 # c1.print()
 

@@ -124,8 +124,8 @@ class Circuit:
                 break
             for list_of_gates in comb:
                 current_time = time.time()
-                if (current_time - start_time) / 60 >= 3:
-                    print("3 minutes")
+                if (current_time - start_time) / 60 >= 1:
+                    print("observation" , observation.number)
                     print((current_time - start_time) / 60)
                     flag = True
                     break
