@@ -60,19 +60,12 @@ class Circuit:
             g.calculate()
 
     def check_fix(self, observation):
-        # print(observation.number,":")
-        # print ('observation outputs: ',[x.value for x in observation.outputs])
-        # print('circuit outputs: ',[x.value for x in self.outputs])
         for output_observation, output_circuit in zip(observation.outputs, self.outputs):
             if output_circuit.value != output_observation.value:
                 return False
         return True
 
     def print(self):
-        # print("name: " + self.name)
-        # print("outputs: " + self.outputs)
-        # print("inputs: "+self.inputs)
-        # print("gates: ")
         for g in self.gates:
             print(g)
 
@@ -132,8 +125,7 @@ class Circuit:
                 if not self.intersection(visited, list_of_gates):
                     self.run_diagnose(list(list_of_gates))
                     if self.check_fix(observation):
-                        # print(observation.number, ": ", [y.gate_name for y in list_of_gates])
-                        # remove the visited fix gates
+                        print(observation.number, ": ", [y.gate_name for y in list_of_gates])
                         visited.append(list(list_of_gates))
                     for gate in list_of_gates:
                         gate.switch_unfilpped()
@@ -143,5 +135,4 @@ class Circuit:
         new_row = {'System Name': self.name, 'Observation no.': observation.number,
                    'Number of Diagnoses': len(visited),
                    'Minimal Cardinality': min_cardinality, 'Runtime (ms)': round((end_time-start_time)*1000)}
-        # [self.name, observation.number, len(visited), min_cardinality]
         self.df = self.df.append(new_row,ignore_index=True)
