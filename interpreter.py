@@ -2,10 +2,10 @@ from circuit import Circuit
 from observation import Observation
 
 name_file = 'c17'
-c1 = Circuit("data/circuits/Data_Systems/"+name_file+".sys")
+c1 = Circuit("Data_Systems/"+name_file+".sys")
 # c1.print()
 
-f = open('data/circuits/Data_Observations/'+name_file+'_iscas85.obs', "r")
+f = open('Data_Observations/'+name_file+'_iscas85.obs', "r")
 system = f.read()
 
 observations = system.split('.')
@@ -22,7 +22,7 @@ for object_observation in observations_list:
 
     c1.create_graph_gates(object_observation)
 
-# c1.df.to_csv(name_file+'.csv')
+c1.df.to_csv(name_file+'.csv')
     ## what output is fault
     # bad_outputs = c1.check_observation(object_observation)
 
