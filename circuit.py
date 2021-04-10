@@ -60,19 +60,12 @@ class Circuit:
             g.calculate()
 
     def check_fix(self, observation):
-        # print(observation.number,":")
-        # print ('observation outputs: ',[x.value for x in observation.outputs])
-        # print('circuit outputs: ',[x.value for x in self.outputs])
         for output_observation, output_circuit in zip(observation.outputs, self.outputs):
             if output_circuit.value != output_observation.value:
                 return False
         return True
 
     def print(self):
-        # print("name: " + self.name)
-        # print("outputs: " + self.outputs)
-        # print("inputs: "+self.inputs)
-        # print("gates: ")
         for g in self.gates:
             print(g)
 
@@ -125,7 +118,7 @@ class Circuit:
             for list_of_gates in comb:
                 current_time = time.time()
                 if (current_time - start_time) / 60 >= 1:
-                    print("observation" , observation.number)
+                    print("observation", observation.number)
                     print((current_time - start_time) / 60)
                     flag = True
                     break
@@ -142,6 +135,6 @@ class Circuit:
         end_time = time.time()
         new_row = {'System Name': self.name, 'Observation no.': observation.number,
                    'Number of Diagnoses': len(visited),
-                   'Minimal Cardinality': min_cardinality, 'Runtime (ms)': round((end_time-start_time)*1000)}
+                   'Minimal Cardinality': min_cardinality, 'Runtime (ms)': round((end_time - start_time) * 1000)}
         # [self.name, observation.number, len(visited), min_cardinality]
-        self.df = self.df.append(new_row,ignore_index=True)
+        self.df = self.df.append(new_row, ignore_index=True)
