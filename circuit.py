@@ -132,7 +132,7 @@ class Circuit:
                 if not self.intersection(visited, list_of_gates):
                     self.run_diagnose(list(list_of_gates))
                     if self.check_fix(observation):
-                        # print(observation.number, ": ", [y.gate_name for y in list_of_gates])
+                        print(observation.number, ": ", [y.gate_name for y in list_of_gates])
                         # remove the visited fix gates
                         visited.append(list(list_of_gates))
                     for gate in list_of_gates:
