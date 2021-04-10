@@ -20,35 +20,36 @@ class Gate:
             self.gate_output.value = not self.gate_output.value
 
     def calculate(self):
-        if not self.flipped:
+        if re.match("^and", self.gate_type):
+            self.gate_output.value = all([i.value for i in self.gate_inputs])
 
-            if re.match("^and", self.gate_type):
-                self.gate_output.value = all([i.value for i in self.gate_inputs])
+        elif re.match("^or", self.gate_type):
+            self.gate_output.value = any([i.value for i in self.gate_inputs])
 
+        elif re.match("^xor", self.gate_type):
+            xor_list = [i.value for i in self.gate_inputs]
+            xor = xor_list.count(1)
+            if xor % 2 == 0:
+                self.gate_output.value = False
+            else:
+                self.gate_output.value = True
 
-            elif re.match("^or", self.gate_type):
-                self.gate_output.value = any([i.value for i in self.gate_inputs])
+        elif re.match("^nor", self.gate_type):
 
-            elif re.match("^xor", self.gate_type):
-                xor_list = [i.value for i in self.gate_inputs]
-                xor = xor_list.count(1)
-                if xor % 2 == 0:
-                    self.gate_output.value = False
-                else:
-                    self.gate_output.value = True
+            self.gate_output.value = not (any([i.value for i in self.gate_inputs]))
 
-            elif re.match("^nor", self.gate_type):
-                self.gate_output.value = not (any([i.value for i in self.gate_inputs]))
+        elif re.match("^nand", self.gate_type):
 
-            elif re.match("^nand", self.gate_type):
+            self.gate_output.value = not (all([i.value for i in self.gate_inputs]))
 
-                self.gate_output.value = not (all([i.value for i in self.gate_inputs]))
+        elif self.gate_type.find("inverter") != -1:
 
-            elif self.gate_type.find("inverter") != -1:
-                self.gate_output.value = not self.gate_inputs[0].value
+            self.gate_output.value = not self.gate_inputs[0].value
 
-            elif self.gate_type.find("buffer") != -1:
-                self.gate_output.value = self.gate_inputs[0].value
+        elif self.gate_type.find("buffer") != -1:
+            self.gate_output.value = self.gate_inputs[0].value
+        if self.flipped:
+            self.gate_output.value = not self.gate_output.value
 
     def __str__(self):
         return "gate type: " + self.gate_type + \
