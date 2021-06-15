@@ -1,4 +1,6 @@
 import re
+from sympy.logic.boolalg import Xor,And,Nand,Nor,Not,Or
+from sympy import symbols, s, sympify
 
 
 class Gate:
@@ -8,6 +10,9 @@ class Gate:
         self.gate_inputs = gate_inputs
         self.gate_type = gate_type
         self.flipped = False
+
+
+
 
     def switch_flipped(self):
         if not self.flipped:

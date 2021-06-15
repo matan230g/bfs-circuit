@@ -58,6 +58,8 @@ class Circuit:
             g.switch_flipped()
         for g in self.gates:
             g.calculate()
+    def run_sat(self,observation):
+
 
     def check_fix(self, observation):
         # print(observation.number,":")
@@ -126,13 +128,13 @@ class Circuit:
                 current_time = time.time()
                 if (current_time - start_time) / 60 >= 1:
                     print("observation" , observation.number)
-                    print((current_time - start_time) / 60)
+                    # print((current_time - start_time) / 60)
                     flag = True
                     break
                 if not self.intersection(visited, list_of_gates):
                     self.run_diagnose(list(list_of_gates))
                     if self.check_fix(observation):
-                        print(observation.number, ": ", [y.gate_name for y in list_of_gates])
+                        # print(observation.number, ": ", [y.gate_name for y in list_of_gates])
                         # remove the visited fix gates
                         visited.append(list(list_of_gates))
                     for gate in list_of_gates:
