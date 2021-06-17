@@ -3,12 +3,14 @@ from sympy import symbols, sympify, satisfiable
 from sympy.logic.boolalg import to_cnf
 from pysat.formula import WCNF,CNF
 from pysat.examples.rc2 import RC2
+
+import math
 from pysat.solvers import Gluecard4,Solver,Lingeling,Minicard
 
 
 
 # key _letters_value _Integer
-from interp import interp
+from interp import MinimalSubset
 
 
 f1 = "h1 >> ((a >> (x & Y)) & (a << (x & Y)))"
@@ -57,7 +59,7 @@ f3 = "h3 >> ((w >> (a | b)) & (w << (a | b)))"
 # #     print(k, v)
 
 
-interp = interp()
+interp = MinimalSubset()
 interp.create_dictionary(f1)
 interp.create_dictionary(f2)
 interp.create_dictionary(f3)
@@ -79,6 +81,8 @@ wcnf.append([interp.map_atoms.get('h1')],weight=1)
 wcnf.append([interp.map_atoms.get('h2')],weight=1)
 wcnf.append([interp.map_atoms.get('h3')],weight=1)
 with RC2(wcnf, solver='mc') as rc2:
+    minicard= math.inf
+    first_time=True
     while True:
         ans = rc2.compute()
         if ans is None:
@@ -86,9 +90,16 @@ with RC2(wcnf, solver='mc') as rc2:
         ans = [interp.convert_integer_to_letters(x) for x in ans]
         print(ans)
         for x in ans:
+            counter=0
             if x.startswith('~') and 'h' in x:
+                counter=counter+1
                 rc2.add_clause([abs(interp.convert_letters_to_integer(x))])
-                break
+        if first_time:
+            minicard=counter
+            first_time=False
+        if minicard+2<counter:
+            break
+
     # ans_2=rc2.compute()
     # ans_2=[interp.convert_integer_to_letters(x) for x in ans_2]
     # print(ans_2)

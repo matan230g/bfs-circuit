@@ -51,8 +51,8 @@ class Circuit:
 
         for x, output_ob in zip(observation.inputs_outputs[len(self.inputs):], self.outputs):
             observation.outputs.append(Node(x))
-        for g in self.gates:
-            g.calculate()
+        # for g in self.gates:
+        #     g.calculate()
 
     def run_diagnose(self, list_gates):
         for g in list_gates:
@@ -84,8 +84,9 @@ class Circuit:
         # print("outputs: " + self.outputs)
         # print("inputs: "+self.inputs)
         # print("gates: ")
-        for g in self.gates:
-            print(g)
+        # for g in self.gates:
+        #     print(g)
+        pass
 
     @staticmethod
     def create_node(nodes):
