@@ -1,44 +1,14 @@
 from sympy.logic.boolalg import Xor, And, Nand, Nor, Not, Or
 from sympy import symbols, sympify, satisfiable
 from sympy.logic.boolalg import to_cnf
-from pysat.formula import WCNF
+from pysat.formula import WCNF,CNF
+from pysat.examples.rc2 import RC2
+from pysat.solvers import Gluecard4,Solver,Lingeling,Minicard
+
 
 
 # key _letters_value _Integer
 from interp import interp
-
-
-def create_dictionary(list_statements):
-    atoms
-    for s in list_statements:
-        atoms.append(sympify(statement).atoms())
-    atoms = sympify(statement).atoms()
-    map_atoms = {}
-    for letter in atoms:
-        if map_atoms.get(letter) is None:
-            map_atoms[letter] = idx
-            idx = idx + 1
-    return map_atoms
-
-def convert_statement(statement):
-    statement_sympy = sympify(statement)
-    statement_cnf = str(to_cnf(statement_sympy))
-    statement_cnf = statement_cnf.replace('(', "")
-    statement_cnf = statement_cnf.replace(')', "")
-    list_statements = statement_cnf.split('&')
-    literals = []
-    for s in list_statements:
-        literals.append(s.split('|'))
-    res = [convert_letters_to_integer(x_temp) for x_temp in literals]
-    return res
-
-
-def convert_letters_to_integer(map_l_i, atom):
-    key = atom.replace('~', '')
-    int_value = map_l_i.get(key)
-    if '~' in atom:
-        return int_value*-1
-    return int_value
 
 
 f1 = "h1 >> ((a >> (x & Y)) & (a << (x & Y)))"
@@ -86,13 +56,48 @@ f3 = "h3 >> ((w >> (a | b)) & (w << (a | b)))"
 # # for k, v in dic.items():
 # #     print(k, v)
 
+
 interp = interp()
 interp.create_dictionary(f1)
-answer = interp.convert_statement(f1)
-print(to_cnf(sympify(f1)))
-print(answer)
-
+interp.create_dictionary(f2)
+interp.create_dictionary(f3)
+answer_1 = interp.convert_statement(f1)
+answer_2 = interp.convert_statement(f2)
+answer_3 = interp.convert_statement(f3)
 wcnf = WCNF()
-# wcnf.append([1,2,3], weight=1)
-# wcnf.append([4,5,6], weight=3)
-# wcnf.append([4,5,6], weight=3)
+s= Solver()
+for arr in answer_1:
+    wcnf.append(arr)
+for arr in answer_2:
+    wcnf.append(arr)
+for arr in answer_3:
+    wcnf.append(arr)
+wcnf.append([interp.map_atoms.get('x')])
+wcnf.append([interp.map_atoms.get('Y')])
+wcnf.append([-1*interp.map_atoms.get('z')])
+wcnf.append([-1*interp.map_atoms.get('w')])
+wcnf.append([interp.map_atoms.get('h1')],weight=1)
+wcnf.append([interp.map_atoms.get('h2')],weight=1)
+wcnf.append([interp.map_atoms.get('h3')],weight=1)
+with RC2(wcnf) as rc2:
+    ans = rc2.compute()
+    ans=[interp.convert_integer_to_letters(x) for x in ans]
+    print(ans)
+    for x in ans:
+        if x.startswith('~') and 'h' in x:
+            rc2.add_clause([abs(interp.convert_letters_to_integer(x))])
+            break
+    ans_2=rc2.compute()
+    ans_2=[interp.convert_integer_to_letters(x) for x in ans_2]
+    print(ans_2)
+
+# # a=s.solve(assumptions=[3,4,-6,-8])
+# # print(s.get_status())
+
+#
+
+
+
+
+
+

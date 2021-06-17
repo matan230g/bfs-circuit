@@ -23,6 +23,14 @@ class interp:
             return int_value * -1
         return int_value
 
+    def convert_integer_to_letters(self,integer):
+        for k,v in self.map_atoms.items():
+            if v == abs(integer):
+                if integer<0:
+                    return '~'+k
+                else:
+                    return k
+
     def convert_statement(self, statement):
         statement_sympy = sympify(statement)
         statement_cnf = str(to_cnf(statement_sympy))
