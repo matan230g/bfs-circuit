@@ -41,6 +41,7 @@ class Circuit:
                     inputs_gate.append(self.find_nodes(i))
             output_node = self.find_nodes(output_gate)
             self.gates.append(Gate(gate_type, gate_name, output_node, inputs_gate))
+            self.run_cnf_gates(self.gates)
 
     def add_observation(self, observation):
         # insert observation
@@ -58,7 +59,15 @@ class Circuit:
             g.switch_flipped()
         for g in self.gates:
             g.calculate()
+
+
+    def run_cnf_gates(self,list_gates):
+        for gate in list_gates:
+            gate.get_gate_cnf()
+
+
     def run_sat(self,observation):
+        pass
 
 
     def check_fix(self, observation):
@@ -147,3 +156,4 @@ class Circuit:
                    'Minimal Cardinality': min_cardinality, 'Runtime (ms)': round((end_time-start_time)*1000)}
         # [self.name, observation.number, len(visited), min_cardinality]
         self.df = self.df.append(new_row,ignore_index=True)
+

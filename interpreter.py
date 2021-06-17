@@ -1,10 +1,13 @@
 from circuit import Circuit
 from observation import Observation
 
-name_file = '74181'
+name_file = 'c17'
 c1 = Circuit("Data_Systems/"+name_file+".sys")
 # c1.print()
+for gate in c1.gates:
+    print(gate.cnf)
 
+print()
 f = open('Data_Observations/'+name_file+'_iscas85.obs', "r")
 system = f.read()
 

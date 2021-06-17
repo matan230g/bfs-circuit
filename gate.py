@@ -1,6 +1,6 @@
 import re
-from sympy.logic.boolalg import Xor,And,Nand,Nor,Not,Or
-from sympy import symbols, s, sympify
+from sympy.logic.boolalg import Xor, And, Nand, Nor, Not, Or, Equivalent, Implies, to_cnf
+from sympy import symbols, sympify
 
 
 class Gate:
@@ -10,6 +10,46 @@ class Gate:
         self.gate_inputs = gate_inputs
         self.gate_type = gate_type
         self.flipped = False
+        self.cnf = ""
+
+
+
+    def get_gate_cnf(self):
+        gate_logic = None
+
+        input_0 = symbols(self.gate_inputs[0].name)
+        if len(self.gate_inputs) > 1:
+            input_1 = symbols(self.gate_inputs[1].name)
+
+        output = symbols(self.gate_output.name)
+
+        if re.match("^and", self.gate_type):
+            gate_logic = And(input_0, input_1)
+
+        elif re.match("^or", self.gate_type):
+            gate_logic = Or(input_0, input_1)
+
+        elif re.match("^xor", self.gate_type):
+            gate_logic = Xor(input_0, input_1)
+
+        elif re.match("^nor", self.gate_type):
+            gate_logic = Nor(input_0, input_1)
+
+        elif re.match("^nand", self.gate_type):
+            gate_logic = Nand(input_0, input_1)
+
+        elif self.gate_type.find("inverter") != -1:
+            gate_logic = Not(input_0)
+
+        elif self.gate_type.find("buffer") != -1:
+            gate_logic = Not(Not(input_0))
+
+
+        self.cnf = Implies(self.gate_name,Equivalent(output,gate_logic))
+        self.cnf = to_cnf(self.cnf)
+        # print(to_cnf(self.cnf))
+
+
 
 
 
