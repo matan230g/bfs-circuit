@@ -8,6 +8,7 @@ class interp:
     def __init__(self):
         self.map_atoms = {}
         self.atoms_counter = 1
+        self.wcnf =WCNF
 
     def create_dictionary(self, statement):
         atoms = sympify(statement).atoms()
@@ -46,5 +47,6 @@ class interp:
             for x_temp in k:
                 x_temp = x_temp.replace(" ","")
                 clu.append(self.convert_letters_to_integer(x_temp))
+            self.wcnf.append(clu)
             res.append(clu)
         return res

@@ -65,7 +65,6 @@ answer_1 = interp.convert_statement(f1)
 answer_2 = interp.convert_statement(f2)
 answer_3 = interp.convert_statement(f3)
 wcnf = WCNF()
-s= Solver()
 for arr in answer_1:
     wcnf.append(arr)
 for arr in answer_2:
