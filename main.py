@@ -79,20 +79,22 @@ wcnf.append([-1*interp.map_atoms.get('w')])
 wcnf.append([interp.map_atoms.get('h1')],weight=1)
 wcnf.append([interp.map_atoms.get('h2')],weight=1)
 wcnf.append([interp.map_atoms.get('h3')],weight=1)
-with RC2(wcnf) as rc2:
-    ans = rc2.compute()
-    ans=[interp.convert_integer_to_letters(x) for x in ans]
-    print(ans)
-    for x in ans:
-        if x.startswith('~') and 'h' in x:
-            rc2.add_clause([abs(interp.convert_letters_to_integer(x))])
+with RC2(wcnf, solver='mc') as rc2:
+    while True:
+        ans = rc2.compute()
+        if ans is None:
             break
-    ans_2=rc2.compute()
-    ans_2=[interp.convert_integer_to_letters(x) for x in ans_2]
-    print(ans_2)
+        ans = [interp.convert_integer_to_letters(x) for x in ans]
+        print(ans)
+        for x in ans:
+            if x.startswith('~') and 'h' in x:
+                rc2.add_clause([abs(interp.convert_letters_to_integer(x))])
+                break
+    # ans_2=rc2.compute()
+    # ans_2=[interp.convert_integer_to_letters(x) for x in ans_2]
+    # print(ans_2)
 
-# # a=s.solve(assumptions=[3,4,-6,-8])
-# # print(s.get_status())
+
 
 #
 
