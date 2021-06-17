@@ -5,15 +5,6 @@ from observation import Observation
 
 name_file = 'c17'
 c1 = Circuit("Data_Systems/"+name_file+".sys")
-# c1.print()
-# for gate in c1.gates:
-#     input_0 = symbols(gate.gate_inputs[0].name)
-#     input_1 = symbols(gate.gate_inputs[1].name)
-#     # output = symbols(gate.gate_inputs[1].name)
-#     print(gate.cnf)
-#     gate.cnf = gate.cnf.subs(input_0, 1)
-#     print(gate.cnf)
-#     print()
 
 print()
 f = open('Data_Observations/'+name_file+'_iscas85.obs', "r")
@@ -38,14 +29,9 @@ for object_observation in observations_list:
 
         for node in object_observation.outputs:
             node.name = symbols(node.name)
-        # input_0 = symbols(gate.gate_inputs[0].name)
-        # if len(gate.gate_inputs) > 1:
-        #     input_1 = symbols(gate.gate_inputs[1].name)
-        # output = symbols(gate.gate_output[0].name)
+
         print("before ob")
         print(gate.cnf)
-        # gate.cnf = gate.cnf.subs(input_0, 1)
-
 
         for node in object_observation.inputs:
             print("node:",node.name , node.value)
@@ -62,7 +48,7 @@ for object_observation in observations_list:
         print()
 
     # c1.create_graph_gates(object_observation)
-    c1.ran_sat(object_observation)
+    # matan
 
 c1.df.to_csv(name_file+'.csv')
     ## what output is fault
