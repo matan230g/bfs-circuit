@@ -1,11 +1,19 @@
+from sympy import symbols
+
 from circuit import Circuit
 from observation import Observation
 
 name_file = 'c17'
 c1 = Circuit("Data_Systems/"+name_file+".sys")
 # c1.print()
-for gate in c1.gates:
-    print(gate.cnf)
+# for gate in c1.gates:
+#     input_0 = symbols(gate.gate_inputs[0].name)
+#     input_1 = symbols(gate.gate_inputs[1].name)
+#     # output = symbols(gate.gate_inputs[1].name)
+#     print(gate.cnf)
+#     gate.cnf = gate.cnf.subs(input_0, 1)
+#     print(gate.cnf)
+#     print()
 
 print()
 f = open('Data_Observations/'+name_file+'_iscas85.obs', "r")
@@ -22,6 +30,36 @@ for o in observations:
 
 for object_observation in observations_list:
     c1.add_observation(object_observation)
+
+    for gate in c1.gates:
+
+        for node in object_observation.inputs:
+            node.name = symbols(node.name)
+
+        for node in object_observation.outputs:
+            node.name = symbols(node.name)
+        # input_0 = symbols(gate.gate_inputs[0].name)
+        # if len(gate.gate_inputs) > 1:
+        #     input_1 = symbols(gate.gate_inputs[1].name)
+        # output = symbols(gate.gate_output[0].name)
+        print("before ob")
+        print(gate.cnf)
+        # gate.cnf = gate.cnf.subs(input_0, 1)
+
+
+        for node in object_observation.inputs:
+            print("node:",node.name , node.value)
+            gate.cnf = gate.cnf.subs(node.name,node.value)
+            print(gate.cnf)
+
+        for node in object_observation.outputs:
+            print("node:",node.name , node.value)
+            gate.cnf = gate.cnf.subs(node.name,node.value)
+            print(gate.cnf)
+
+        print("final cnf")
+        print(gate.cnf)
+        print()
 
     # c1.create_graph_gates(object_observation)
     c1.ran_sat(object_observation)
