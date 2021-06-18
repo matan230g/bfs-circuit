@@ -41,7 +41,7 @@ class Circuit:
                     inputs_gate.append(self.find_nodes(i))
             output_node = self.find_nodes(output_gate)
             self.gates.append(Gate(gate_type, gate_name, output_node, inputs_gate))
-            self.run_cnf_gates(self.gates)
+        self.run_cnf_gates()
 
     def add_observation(self, observation):
         # insert observation
@@ -61,8 +61,8 @@ class Circuit:
             g.calculate()
 
 
-    def run_cnf_gates(self,list_gates):
-        for gate in list_gates:
+    def run_cnf_gates(self):
+        for gate in self.gates:
             gate.get_gate_cnf()
 
 

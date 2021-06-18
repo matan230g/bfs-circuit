@@ -10,6 +10,7 @@ class Gate:
         self.gate_inputs = gate_inputs
         self.gate_type = gate_type
         self.flipped = False
+        self.symbol = symbols(self.gate_name)
         self.cnf = ""
 
 
@@ -17,11 +18,11 @@ class Gate:
     def get_gate_cnf(self):
         gate_logic = None
 
-        input_0 = symbols(self.gate_inputs[0].name)
+        input_0 = self.gate_inputs[0].symbol
         if len(self.gate_inputs) > 1:
-            input_1 = symbols(self.gate_inputs[1].name)
+            input_1 = self.gate_inputs[1].symbol
 
-        output = symbols(self.gate_output.name)
+        output = self.gate_output.symbol
 
         if re.match("^and", self.gate_type):
             gate_logic = And(input_0, input_1)
@@ -45,7 +46,8 @@ class Gate:
             gate_logic = Not(Not(input_0))
 
 
-        self.cnf = Implies(self.gate_name,Equivalent(output,gate_logic))
+        self.cnf = Implies(self.symbol,Equivalent(output,gate_logic))
+        # print(self.cnf)
         self.cnf = to_cnf(self.cnf)
         # print(to_cnf(self.cnf))
 
