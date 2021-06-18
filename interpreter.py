@@ -5,7 +5,7 @@ from minimalsubset import MinimalSubset
 from observation import Observation
 
 
-name_file = 'c17'
+name_file = 'c499'
 c1 = Circuit("Data_Systems/"+name_file+".sys")
 
 

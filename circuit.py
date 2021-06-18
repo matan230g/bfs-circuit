@@ -65,6 +65,7 @@ class Circuit:
     def run_cnf_gates(self):
         for gate in self.gates:
             gate.get_gate_cnf()
+            # gate.get_gate_cnf_leq()
 
 
     def run_sat(self,observation):

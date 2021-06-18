@@ -12,8 +12,76 @@ class Gate:
         self.flipped = False
         self.symbol = symbols(self.gate_name)
         self.cnf = ""
+        self.cnf_leq = ""
 
 
+    def get_gate_cnf_leq(self):
+        gate_logic = None
+
+        input_0 = self.gate_inputs[0].symbol
+        if len(self.gate_inputs) > 1:
+            input_1 = self.gate_inputs[1].symbol
+
+        output = self.gate_output.symbol
+
+        if re.match("^and", self.gate_type):
+            gate_logic = And(input_0, input_1)
+            if len(self.gate_inputs) > 2:
+                for idx in range(2, len(self.gate_inputs)):
+                    gate_logic = And(gate_logic, self.gate_inputs[idx].symbol)
+
+            # gate_logic = Xor(gate_logic,Not(self.gate_name))
+
+
+        elif re.match("^or", self.gate_type):
+            gate_logic = Or(input_0, input_1)
+            if len(self.gate_inputs) > 2:
+                for idx in range(2, len(self.gate_inputs)):
+                    gate_logic = Or(gate_logic, self.gate_inputs[idx].symbol)
+
+            # gate_logic = Xor(gate_logic,self.gate_name)
+
+        elif re.match("^xor", self.gate_type):
+            gate_logic = Xor(input_0, input_1)
+            if len(self.gate_inputs) > 2:
+                for idx in range(2, len(self.gate_inputs)):
+                    gate_logic = Xor(gate_logic, self.gate_inputs[idx].symbol)
+
+            # gate_logic = Xor(gate_logic,self.gate_name)
+
+        elif re.match("^nor", self.gate_type):
+            gate_logic = Or(input_0, input_1)
+            if len(self.gate_inputs) > 2:
+                for idx in range(2, len(self.gate_inputs)):
+                    gate_logic = Or(gate_logic, self.gate_inputs[idx].symbol)
+            gate_logic = Not(gate_logic)
+
+            # gate_logic = Xor(gate_logic,self.gate_name)
+
+        elif re.match("^nand", self.gate_type):
+            gate_logic = And(input_0, input_1)
+            if len(self.gate_inputs) > 2:
+                for idx in range(2, len(self.gate_inputs)):
+                    gate_logic = And(gate_logic, self.gate_inputs[idx].symbol)
+            gate_logic = Not(gate_logic)
+
+            # gate_logic = Xor(gate_logic,self.gate_name)
+
+        elif self.gate_type.find("inverter") != -1:
+            gate_logic = Not(input_0)
+
+            # gate_logic = Xor(gate_logic,self.gate_name)
+
+        elif self.gate_type.find("buffer") != -1:
+            gate_logic = Not(Not(input_0))
+
+            # gate_logic = Xor(gate_logic,self.gate_name)
+
+        gate_logic = Xor(gate_logic, Not(self.gate_name))
+        self.cnf_leq = Equivalent(output, gate_logic)
+        # print(self.cnf)
+        self.cnf_leq = to_cnf(self.cnf_leq)
+        # print(to_cnf(self.cnf))
 
     def get_gate_cnf(self):
         gate_logic = None
