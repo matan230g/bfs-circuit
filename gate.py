@@ -26,18 +26,36 @@ class Gate:
 
         if re.match("^and", self.gate_type):
             gate_logic = And(input_0, input_1)
+            if len(self.gate_inputs)>2:
+                for idx in range(2, len(self.gate_inputs)):
+                    gate_logic = And(gate_logic, self.gate_inputs[idx].symbol)
+
 
         elif re.match("^or", self.gate_type):
             gate_logic = Or(input_0, input_1)
+            if len(self.gate_inputs) > 2:
+                for idx in range(2, len(self.gate_inputs)):
+                    gate_logic = Or(gate_logic, self.gate_inputs[idx].symbol)
 
         elif re.match("^xor", self.gate_type):
             gate_logic = Xor(input_0, input_1)
+            if len(self.gate_inputs) > 2:
+                for idx in range(2, len(self.gate_inputs)):
+                    gate_logic = Xor(gate_logic, self.gate_inputs[idx].symbol)
 
         elif re.match("^nor", self.gate_type):
-            gate_logic = Nor(input_0, input_1)
+            gate_logic = Or(input_0, input_1)
+            if len(self.gate_inputs) > 2:
+                for idx in range(2, len(self.gate_inputs)):
+                    gate_logic = Or(gate_logic, self.gate_inputs[idx].symbol)
+            gate_logic = Not(gate_logic)
 
         elif re.match("^nand", self.gate_type):
-            gate_logic = Nand(input_0, input_1)
+            gate_logic = And(input_0, input_1)
+            if len(self.gate_inputs) > 2:
+                for idx in range(2, len(self.gate_inputs)):
+                    gate_logic = And(gate_logic, self.gate_inputs[idx].symbol)
+            gate_logic = Not(gate_logic)
 
         elif self.gate_type.find("inverter") != -1:
             gate_logic = Not(input_0)

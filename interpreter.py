@@ -5,7 +5,7 @@ from minimalsubset import MinimalSubset
 from observation import Observation
 
 
-name_file = 'c17'
+name_file = '74181'
 c1 = Circuit("Data_Systems/"+name_file+".sys")
 
 
@@ -26,11 +26,11 @@ for o in observations:
 for object_observation in observations_list:
     c1.add_observation(object_observation)
     print('inputs:')
-    for i in c1.inputs:
+    for i in object_observation.inputs:
         print(i.value,end='')
     print()
     print('outputs:')
-    for o in c1.outputs:
+    for o in object_observation.outputs:
         print(o.value,end=',')
     print()
     solver = MinimalSubset()
@@ -63,7 +63,7 @@ for object_observation in observations_list:
         solver.add_soft(gate.gate_name)
     solver.run_solver()
     print('Minimal Cardinality',solver.min_card)
-    print('Time:',solver.time)
+    print('Time:', solver.time)
     print('Number of diagnoses',solver.number_of_diagnoses)
 
 
