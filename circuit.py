@@ -53,6 +53,7 @@ class Circuit:
             observation.outputs.append(Node(x))
         # for g in self.gates:
         #     g.calculate()
+        self.run_cnf_gates()
 
     def run_diagnose(self, list_gates):
         for g in list_gates:

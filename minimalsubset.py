@@ -64,14 +64,13 @@ class MinimalSubset:
     def run_solver(self):
         start_time = time.time()
         with RC2(self.wcnf, solver='mc') as rc2:
-            first_time = True
             while True:
                 ans = rc2.compute()
                 if ans is None:
                     print('break no answer')
                     break
                 ans = [self.convert_integer_to_letters(x) for x in ans]
-                print(ans)
+                # print(ans)
                 counter = 0
                 for x in ans:
                     if x.startswith('~') and 'gate' in x:
@@ -82,7 +81,8 @@ class MinimalSubset:
                     self.min_card = counter
 
                 if self.min_card + 2 < counter:
-                    print('break')
+                    print('break min card:',self.min_card )
+                    print('number of comp: ',counter)
                     break
 
                 self.number_of_diagnoses = self.number_of_diagnoses+1

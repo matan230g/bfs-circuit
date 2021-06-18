@@ -5,7 +5,7 @@ from minimalsubset import MinimalSubset
 from observation import Observation
 
 
-name_file = '74181'
+name_file = 'c17'
 c1 = Circuit("Data_Systems/"+name_file+".sys")
 
 
@@ -25,14 +25,14 @@ for o in observations:
 
 for object_observation in observations_list:
     c1.add_observation(object_observation)
-    print('inputs:')
-    for i in object_observation.inputs:
-        print(i.value,end='')
-    print()
-    print('outputs:')
-    for o in object_observation.outputs:
-        print(o.value,end=',')
-    print()
+    # print('inputs:')
+    # for i in object_observation.inputs:
+    #     print(i.value,end='')
+    # print()
+    # print('outputs:')
+    # for o in object_observation.outputs:
+    #     print(o.value,end=',')
+    # print()
     solver = MinimalSubset()
     for gate in c1.gates:
 
@@ -62,14 +62,13 @@ for object_observation in observations_list:
     for gate in c1.gates:
         solver.add_soft(gate.gate_name)
     solver.run_solver()
-    print('Minimal Cardinality',solver.min_card)
-    print('Time:', solver.time)
-    print('Number of diagnoses',solver.number_of_diagnoses)
-
-
-
-
-
+    # print('Minimal Cardinality',solver.min_card)
+    # print('Time:', solver.time)
+    # print('Number of diagnoses',solver.number_of_diagnoses)
+    new_row = {'System Name': c1.name, 'Observation no.': object_observation.number,
+               'Number of Diagnoses': solver.number_of_diagnoses,
+               'Minimal Cardinality': solver.min_card, 'Runtime (ms)': round(solver.time * 1000)}
+    c1.df = c1.df.append(new_row, ignore_index=True)
 
 c1.df.to_csv(name_file+'.csv')
     ## what output is fault
