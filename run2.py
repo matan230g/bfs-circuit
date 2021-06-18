@@ -6,7 +6,7 @@ from minsat_2 import MinimalSubset_2
 from observation import Observation
 
 
-name_file = '74181'
+name_file = 'c17'
 c1 = Circuit("Data_Systems/"+name_file+".sys")
 
 
@@ -63,7 +63,7 @@ for object_observation in observations_list:
     k = c1.find_number_wrong_input(object_observation)
     solver.add_atmost(gates_atmost)
         # solver.add_soft(gate.gate_name)
-    print(object_observation.number)
+    # print(object_observation.number)
     solver.run_solver()
 
     # print('Minimal Cardinality',solver.min_card)

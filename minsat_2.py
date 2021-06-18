@@ -67,39 +67,48 @@ class MinimalSubset_2:
             res.append(clu)
             self.cnf.append(clu)
         return res
-
-    def run_solver(self):
-        start_time = time.time()
+    def find_mini_card(self):
         solver = Minicard(bootstrap_with=self.cnf)
-        solver.add_atmost(self.atmost_cluse,self.k)
-        # self.cnf.append([self.atmost_cluse,self.k],is_atmost=True)
-        flag =True
-        print('before k ',self.k)
+        solver.add_atmost(self.atmost_cluse, self.k)
+        flag=True
         while flag:
             flag = solver.solve()
             ans = solver.get_model()
-            if not flag:
+            if self.k == 0:
+                self.k+=1
+                self.min_card=self.k
                 break
-            ans = [self.convert_integer_to_letters(x) for x in ans]
+            if not flag:
+                self.k+=1
+                self.min_card = self.k + 1
+                break
+            if flag:
+                self.k = self.k - 1
+                solver = Minicard(bootstrap_with=self.cnf)
+                solver.add_atmost(self.atmost_cluse, self.k)
+    def run_solver(self):
+        start_time = time.time()
+        current_time=None
+        self.find_mini_card()
+        print('my k ',self.k)
+        solver = Minicard(bootstrap_with=self.cnf)
+        solver.add_atmost(self.atmost_cluse, self.k)
+        while solver.solve():
+            ans = solver.get_model()
+            ans =[self.convert_integer_to_letters(x) for x in ans]
             print(ans)
             counter = 0
             for x in ans:
                 if x.startswith('~') and 'gate' in x:
-                        counter = counter + 1
-
-            if counter > 0 and self.min_card > counter:
-                self.min_card = counter
-
-
+                    counter = counter + 1
+                    solver.add_clause([abs(self.convert_letters_to_integer(x))])
+                    print('add const',x)
+            if counter==0:
+                break
             self.number_of_diagnoses = self.number_of_diagnoses + 1
-            if flag:
-                self.k = self.k - 1
-                print("k",self.k)
-                solver = Minicard(bootstrap_with=self.cnf)
-                solver.add_atmost(self.atmost_cluse, self.k)
             current_time = time.time()
-
             if (current_time - start_time) / 60 >= 0.5:
                 print('finish run')
-
+        if current_time is None:
+            current_time =time.time()
         self.time = current_time - start_time
