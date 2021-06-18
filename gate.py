@@ -85,7 +85,6 @@ class Gate:
 
     def get_gate_cnf(self):
         gate_logic = None
-
         input_0 = self.gate_inputs[0].symbol
         if len(self.gate_inputs) > 1:
             input_1 = self.gate_inputs[1].symbol
@@ -97,7 +96,6 @@ class Gate:
             if len(self.gate_inputs)>2:
                 for idx in range(2, len(self.gate_inputs)):
                     gate_logic = And(gate_logic, self.gate_inputs[idx].symbol)
-
 
         elif re.match("^or", self.gate_type):
             gate_logic = Or(input_0, input_1)

@@ -41,7 +41,7 @@ class Circuit:
                     inputs_gate.append(self.find_nodes(i))
             output_node = self.find_nodes(output_gate)
             self.gates.append(Gate(gate_type, gate_name, output_node, inputs_gate))
-        self.run_cnf_gates()
+        self.run_cnf_leq()
 
     def add_observation(self, observation):
         # insert observation
@@ -53,7 +53,7 @@ class Circuit:
             observation.outputs.append(Node(x))
         # for g in self.gates:
         #     g.calculate()
-        self.run_cnf_gates()
+        self.run_cnf_leq()
 
     def run_diagnose(self, list_gates):
         for g in list_gates:
@@ -66,6 +66,10 @@ class Circuit:
         for gate in self.gates:
             gate.get_gate_cnf()
             # gate.get_gate_cnf_leq()
+    def run_cnf_leq(self):
+        for gate in self.gates:
+            gate.get_gate_cnf_leq()
+
 
 
     def run_sat(self,observation):
@@ -80,6 +84,15 @@ class Circuit:
             if output_circuit.value != output_observation.value:
                 return False
         return True
+
+    def find_number_wrong_input(self,observation):
+        for g in self.gates:
+            g.calculate()
+        fault_counter = 0
+        for output_observation, output_circuit in zip(observation.outputs, self.outputs):
+            if output_circuit.value != output_observation.value:
+                fault_counter += 1
+        return fault_counter
 
     def print(self):
         # print("name: " + self.name)
