@@ -4,6 +4,7 @@ from circuit import Circuit
 from minimalsubset import MinimalSubset
 from observation import Observation
 
+# Algorithm 1
 
 name_file = 'c499'
 c1 = Circuit("Data_Systems/"+name_file+".sys")

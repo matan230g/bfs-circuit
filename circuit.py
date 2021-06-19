@@ -42,6 +42,8 @@ class Circuit:
             output_node = self.find_nodes(output_gate)
             self.gates.append(Gate(gate_type, gate_name, output_node, inputs_gate))
         self.run_cnf_leq()
+        self.run_cnf_gates()
+
 
     def add_observation(self, observation):
         # insert observation
@@ -53,6 +55,7 @@ class Circuit:
             observation.outputs.append(Node(x))
         # for g in self.gates:
         #     g.calculate()
+        self.run_cnf_gates()
         self.run_cnf_leq()
 
     def run_diagnose(self, list_gates):
@@ -69,11 +72,6 @@ class Circuit:
     def run_cnf_leq(self):
         for gate in self.gates:
             gate.get_gate_cnf_leq()
-
-
-
-    def run_sat(self,observation):
-        pass
 
 
     def check_fix(self, observation):

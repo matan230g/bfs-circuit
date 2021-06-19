@@ -1,12 +1,12 @@
+from pandas import np
 from sympy import symbols
 
 from circuit import Circuit
-from minimalsubset import MinimalSubset
 from minsat_2 import MinimalSubset_2
 from observation import Observation
 
-
-name_file = 'c17'
+# Algorithm 2
+name_file = '74283'
 c1 = Circuit("Data_Systems/"+name_file+".sys")
 
 
@@ -26,14 +26,8 @@ for o in observations:
 
 for object_observation in observations_list:
     c1.add_observation(object_observation)
-    # print('inputs:')
-    # for i in object_observation.inputs:
-    #     print(i.value,end='')
-    # print()
-    # print('outputs:')
-    # for o in object_observation.outputs:
-    #     print(o.value,end=',')
-    # print()
+
+    #sum_leq
     k = c1.find_number_wrong_input(object_observation)
     solver = MinimalSubset_2(k)
 
@@ -63,19 +57,23 @@ for object_observation in observations_list:
     k = c1.find_number_wrong_input(object_observation)
     solver.add_atmost(gates_atmost)
         # solver.add_soft(gate.gate_name)
-    # print(object_observation.number)
+    print(object_observation.number)
     solver.run_solver()
 
     # print('Minimal Cardinality',solver.min_card)
     # print('Time:', solver.time)
     # print('Number of diagnoses',solver.number_of_diagnoses)
     k=c1.find_number_wrong_input(object_observation)
+    if not np.isnan(solver.time):
+        time = round(solver.time*1000)
+    else:
+        time = np.NaN
     new_row = {'System Name': c1.name, 'Observation no.': object_observation.number,
                'Number of Diagnoses': solver.number_of_diagnoses,
-               'Minimal Cardinality': solver.min_card, 'Runtime (ms)': round(solver.time * 1000)}
+               'Minimal Cardinality': solver.min_card, 'Runtime (ms)': time}
     c1.df = c1.df.append(new_row, ignore_index=True)
-
-c1.df.to_csv(name_file+'.csv')
+c1.df.fillna("NA",inplace=True)
+c1.df.to_csv(name_file+'_algo_2.csv')
     ## what output is fault
     # bad_outputs = c1.check_observation(object_observation)
 

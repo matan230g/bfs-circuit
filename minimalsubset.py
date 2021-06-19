@@ -2,11 +2,8 @@ import time
 
 import math
 from pysat.examples.rc2 import RC2
-from pysat.solvers import Minicard
-from sympy.logic.boolalg import Xor, And, Nand, Nor, Not, Or
-from sympy import symbols, sympify, satisfiable
-from sympy.logic.boolalg import to_cnf
 from pysat.formula import WCNF
+# Solver for algorithm 1
 
 class MinimalSubset:
     def __init__(self):

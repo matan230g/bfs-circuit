@@ -1,13 +1,11 @@
 import time
 
 import math
-from pysat.examples.rc2 import RC2
+from pandas import np
 from pysat.solvers import Minicard
-from sympy.logic.boolalg import Xor, And, Nand, Nor, Not, Or
-from sympy import symbols, sympify, satisfiable
-from sympy.logic.boolalg import to_cnf
 from pysat.formula import CNFPlus
 
+# Solver for algorithm 2
 
 class MinimalSubset_2:
     def __init__(self,k):
@@ -90,25 +88,26 @@ class MinimalSubset_2:
         start_time = time.time()
         current_time=None
         self.find_mini_card()
-        print('my k ',self.k)
         solver = Minicard(bootstrap_with=self.cnf)
         solver.add_atmost(self.atmost_cluse, self.k)
         while solver.solve():
             ans = solver.get_model()
-            ans =[self.convert_integer_to_letters(x) for x in ans]
-            print(ans)
+            ans = [self.convert_integer_to_letters(x) for x in ans]
             counter = 0
             for x in ans:
                 if x.startswith('~') and 'gate' in x:
                     counter = counter + 1
                     solver.add_clause([abs(self.convert_letters_to_integer(x))])
-                    print('add const',x)
-            if counter==0:
+            if counter == 0:
                 break
             self.number_of_diagnoses = self.number_of_diagnoses + 1
             current_time = time.time()
-            if (current_time - start_time) / 60 >= 0.5:
-                print('finish run')
+            if (current_time - start_time) >= 60:
+                print('finish run out of time')
+                self.time=np.nan
+                self.min_card=np.nan
+                self.number_of_diagnoses=np.nan
+                return
         if current_time is None:
-            current_time =time.time()
+            current_time = time.time()
         self.time = current_time - start_time
